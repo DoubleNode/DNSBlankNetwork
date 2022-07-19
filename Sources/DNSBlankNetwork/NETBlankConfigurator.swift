@@ -52,13 +52,8 @@ open class NETBlankConfigurator: NSObject, NETPTCLConfigurator {
     open func didEnterBackground() { }
 
     // MARK: - Worker Logic (Public) -
-    open func restHeaders() -> HTTPHeaders {
-        let headers: HTTPHeaders = [
-            .contentType("application/json"),
-            .accept("application/json"),
-            .acceptLanguage("\(Self.languageCode), en;q=0.5, *;q=0.1"),
-        ]
+    public func restHeaders() throws -> HTTPHeaders {
+        let headers: HTTPHeaders = []
         return headers
     }
-    
 }
