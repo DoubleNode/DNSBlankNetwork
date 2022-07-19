@@ -52,7 +52,7 @@ open class NETBlankConfigurator: NSObject, NETPTCLConfigurator {
     open func didEnterBackground() { }
 
     // MARK: - Worker Logic (Public) -
-    open func restHeaders() throws -> HTTPHeaders {
+    open func restHeaders() -> HTTPHeaders {
         let headers: HTTPHeaders = []
         return headers
     }
