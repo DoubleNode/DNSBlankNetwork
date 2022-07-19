@@ -6,6 +6,7 @@
 //  Copyright © 2020 - 2016 DoubleNode.com. All rights reserved.
 //
 
+import AtomicSwift
 import Alamofire
 import DNSCore
 import DNSProtocols
@@ -16,20 +17,25 @@ open class NETBlankConfigurator: NSObject, NETPTCLConfigurator {
         DNSCore.languageCode
     }
     
+    @Atomic
+    private var options: [String] = []
+    
     override public required init() {
         super.init()
     }
     open func configure() { }
 
-    open func defaultHeaders() -> HTTPHeaders {
-        let headers: HTTPHeaders = [
-            .contentType("application/json"),
-            .accept("application/json"),
-            .acceptLanguage("\(Self.languageCode), en;q=0.5, *;q=0.1"),
-        ]
-        return headers
+    public func checkOption(_ option: String) -> Bool {
+        return self.options.contains(option)
     }
-    
+    open func enableOption(_ option: String) {
+        guard !self.checkOption(option) else { return }
+        self.options.append(option)
+    }
+    open func disableOption(_ option: String) {
+        self.options.removeAll { $0 == option }
+    }
+
     // MARK: - UIWindowSceneDelegate methods
     // Called when the scene has moved from an inactive state to an active state.
     // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
@@ -44,4 +50,15 @@ open class NETBlankConfigurator: NSObject, NETPTCLConfigurator {
     // Use this method to save data, release shared resources, and store enough scene-specific state information
     // to restore the scene back to its current state.
     open func didEnterBackground() { }
+
+    // MARK: - Worker Logic (Public) -
+    open func restHeaders() -> HTTPHeaders {
+        let headers: HTTPHeaders = [
+            .contentType("application/json"),
+            .accept("application/json"),
+            .acceptLanguage("\(Self.languageCode), en;q=0.5, *;q=0.1"),
+        ]
+        return headers
+    }
+    
 }
