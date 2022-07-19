@@ -9,7 +9,7 @@
 import DNSError
 
 public extension DNSCodeLocation {
-    typealias blankNetwork = DNSBlankNetworkCodeLocation
+    typealias BlankNetwork = DNSBlankNetworkCodeLocation
 }
 open class DNSBlankNetworkCodeLocation: DNSCodeLocation {
     override open class var domainPreface: String { "com.doublenode.blankNetwork." }
