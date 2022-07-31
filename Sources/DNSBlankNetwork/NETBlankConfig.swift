@@ -1,5 +1,5 @@
 //
-//  NETBlankConfigurator.swift
+//  NETBlankConfig.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSBlankNetwork
 //
 //  Created by Darren Ehlers.
@@ -12,7 +12,7 @@ import DNSCore
 import DNSProtocols
 import Foundation
 
-open class NETBlankConfigurator: NSObject, NETPTCLConfigurator {
+open class NETBlankConfig: NSObject, NETPTCLConfig {
     static public var languageCode: String {
         DNSCore.languageCode
     }
