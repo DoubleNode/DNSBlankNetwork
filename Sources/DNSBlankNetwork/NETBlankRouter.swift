@@ -24,7 +24,7 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
         DNSCore.languageCode
     }
     
-    private var netConfig: NETPTCLConfig
+    public var netConfig: NETPTCLConfig
     @Atomic private var options: [String] = []
     
     override public required init() {
