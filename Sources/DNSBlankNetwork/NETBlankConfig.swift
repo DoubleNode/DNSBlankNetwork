@@ -9,6 +9,7 @@
 import AtomicSwift
 import Alamofire
 import DNSCore
+import DNSError
 import DNSProtocols
 import Foundation
 
@@ -17,11 +18,12 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         DNSCore.languageCode
     }
     
-    @Atomic
-    private var options: [String] = []
-    
+    @Atomic private var options: [String] = []
+    private var urlComponentsData: [String: URLComponents] = [:]
+
     override public required init() {
         super.init()
+        self.configure()
     }
     open func configure() { }
 
@@ -51,8 +53,38 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
     // to restore the scene back to its current state.
     open func didEnterBackground() { }
 
-    // MARK: - Worker Logic (Public) -
+    // MARK: - Network Config Logic (Public) -
+    open func urlComponents() -> NETPTCLConfigResURLComponents {
+        let code = self.urlComponentsData.keys.first ?? ""
+        return self.urlComponents(for: code)
+    }
+    open func urlComponents(for code: String) -> NETPTCLConfigResURLComponents {
+        let code = self.urlComponentsData.keys.first ?? ""
+        guard let retval = self.urlComponentsData[code] else {
+            let error = DNSError.NetworkBase
+                .invalidParameter(parameter: "code",
+                                  DNSCodeLocation.blankNetwork(self, "\(#file),\(#line),\(#function)"))
+            DNSCore.reportError(error)
+            return .failure(error)
+        }
+        return .success(retval)
+    }
+    open func urlComponents(set components: URLComponents, for code: String) -> NETPTCLConfigResVoid {
+        guard !code.isEmpty else {
+            let error = DNSError.NetworkBase
+                .invalidParameter(parameter: "code",
+                                  DNSCodeLocation.blankNetwork(self, "\(#file),\(#line),\(#function)"))
+            DNSCore.reportError(error)
+            return .failure(error)
+        }
+        self.urlComponentsData[code] = components
+        return .success
+    }
     open func restHeaders() -> NETPTCLConfigResHeaders {
+        let code = self.urlComponentsData.keys.first ?? ""
+        return self.restHeaders(for: code)
+    }
+    open func restHeaders(for code: String) -> NETPTCLConfigResHeaders {
         let headers: HTTPHeaders = []
         return .success(headers)
     }
