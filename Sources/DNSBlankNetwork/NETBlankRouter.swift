@@ -66,9 +66,6 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
     open func didEnterBackground() { }
 
     // MARK: - Network Router Logic (Public) -
-    open func dataRequest(for code: String) -> NETPTCLRouterResDataRequest {
-        .success(AF.request(self))
-    }
     open func asURLRequest() throws -> NETPTCLRouterRtnURLRequest {
         let result = self.netConfig.urlComponents()
         if case .failure(let error) = result {
@@ -82,13 +79,11 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
             DNSCore.reportError(error)
             throw error
         }
-        let result2 = netConfig.restHeaders()
+        let result2 = urlRequest(using: url)
         if case .failure(let error) = result2 {
             throw error
         }
-        let restHeaders = try result2.get()
-        var request = URLRequest(url: url)
-        request.headers = restHeaders
+        let request = try! result2.get()
         return request
     }
     open func asURLRequest(for code: String) -> NETPTCLRouterResURLRequest {
@@ -104,14 +99,31 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
             DNSCore.reportError(error)
             return .failure(error)
         }
-        let result2 = netConfig.restHeaders()
+        let result2 = urlRequest(for: code,
+                                 using: url)
         if case .failure(let error) = result2 {
             DNSCore.reportError(error)
             return .failure(error)
         }
-        let restHeaders = try! result2.get()
+        let request = try! result2.get()
+        return .success(request)
+    }
+    open func dataRequest(for code: String) -> NETPTCLRouterResDataRequest {
+        .success(AF.request(self))
+    }
+    open func urlRequest(using url: URL) -> NETPTCLRouterResURLRequest {
+        return self.urlRequest(for: "", using: url)
+    }
+    open func urlRequest(for code: String,
+                         using url: URL) -> NETPTCLRouterResURLRequest {
+        let result = netConfig.restHeaders()
+        if case .failure(let error) = result {
+            DNSCore.reportError(error)
+            return .failure(error)
+        }
+        let headers = try! result.get()
         var request = URLRequest(url: url)
-        request.headers = restHeaders
+        request.headers = headers
         return .success(request)
     }
 }
