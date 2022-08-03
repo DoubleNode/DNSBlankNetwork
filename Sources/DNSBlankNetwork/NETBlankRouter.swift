@@ -66,51 +66,6 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
     open func didEnterBackground() { }
 
     // MARK: - Network Router Logic (Public) -
-    open func asURLRequest() throws -> NETPTCLRouterRtnURLRequest {
-        let result = self.netConfig.urlComponents()
-        if case .failure(let error) = result {
-            DNSCore.reportError(error)
-            throw error
-        }
-        let components = try result.get()
-        guard let url = components.url else {
-            let error = DNSError.NetworkBase
-                .invalidUrl(DNSCodeLocation.blankNetwork(self, "\(#file),\(#line),\(#function)"))
-            DNSCore.reportError(error)
-            throw error
-        }
-        let result2 = urlRequest(using: url)
-        if case .failure(let error) = result2 {
-            throw error
-        }
-        let request = try! result2.get()
-        return request
-    }
-    open func asURLRequest(for code: String) -> NETPTCLRouterResURLRequest {
-        let result = self.netConfig.urlComponents(for: code)
-        if case .failure(let error) = result {
-            DNSCore.reportError(error)
-            return .failure(error)
-        }
-        let components = try! result.get()
-        guard let url = components.url else {
-            let error = DNSError.NetworkBase
-                .invalidUrl(DNSCodeLocation.blankNetwork(self, "\(#file),\(#line),\(#function)"))
-            DNSCore.reportError(error)
-            return .failure(error)
-        }
-        let result2 = urlRequest(for: code,
-                                 using: url)
-        if case .failure(let error) = result2 {
-            DNSCore.reportError(error)
-            return .failure(error)
-        }
-        let request = try! result2.get()
-        return .success(request)
-    }
-    open func dataRequest(for code: String) -> NETPTCLRouterResDataRequest {
-        .success(AF.request(self))
-    }
     open func urlRequest(using url: URL) -> NETPTCLRouterResURLRequest {
         return self.urlRequest(for: "", using: url)
     }
