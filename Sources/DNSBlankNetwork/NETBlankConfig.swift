@@ -88,4 +88,18 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         let headers: HTTPHeaders = []
         return .success(headers)
     }
+    open func urlRequest(using url: URL) -> NETPTCLConfigResURLRequest {
+        return self.urlRequest(for: "", using: url)
+    }
+    open func urlRequest(for code: String, using url: URL) -> NETPTCLConfigResURLRequest {
+        let result = self.restHeaders(for: code)
+        if case .failure(let error) = result {
+            DNSCore.reportError(error)
+            return .failure(error)
+        }
+        let headers = try! result.get()
+        var request = URLRequest(url: url)
+        request.headers = headers
+        return .success(request)
+    }
 }

@@ -71,14 +71,12 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
     }
     open func urlRequest(for code: String,
                          using url: URL) -> NETPTCLRouterResURLRequest {
-        let result = netConfig.restHeaders()
+        let result = netConfig.urlRequest(for: code, using: url)
         if case .failure(let error) = result {
             DNSCore.reportError(error)
             return .failure(error)
         }
-        let headers = try! result.get()
-        var request = URLRequest(url: url)
-        request.headers = headers
-        return .success(request)
+        let urlRequest = try! result.get()
+        return .success(urlRequest)
     }
 }
