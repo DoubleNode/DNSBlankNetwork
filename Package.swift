@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 //
 //  Package.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSBlankSystems
@@ -12,10 +12,10 @@ import PackageDescription
 let package = Package(
     name: "DNSBlankNetwork",
     platforms: [
-        .iOS(.v13),
-        .tvOS(.v13),
+        .iOS(.v15),
+        .tvOS(.v15),
         .macOS(.v10_15),
-        .watchOS(.v6),
+        .watchOS(.v9),
     ],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
@@ -27,8 +27,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.6.1"),
-        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.9.1"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.9.76")
+        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.10.0"),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.10.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
