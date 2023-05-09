@@ -55,11 +55,13 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
 
     // MARK: - Network Config Logic (Public) -
     open func urlComponents() -> NETPTCLConfigResURLComponents {
-        let code = self.urlComponentsData.keys.first ?? ""
+        var code = "default"
+        if self.urlComponentsData[code] == nil {
+            code = self.urlComponentsData.keys.first ?? ""
+        }
         return self.urlComponents(for: code)
     }
     open func urlComponents(for code: String) -> NETPTCLConfigResURLComponents {
-        let code = self.urlComponentsData.keys.first ?? ""
         guard let retval = self.urlComponentsData[code] else {
             let error = DNSError.NetworkBase
                 .invalidParameters(parameters: ["code"], .blankNetwork(self))
@@ -79,7 +81,10 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         return .success
     }
     open func restHeaders() -> NETPTCLConfigResHeaders {
-        let code = self.urlComponentsData.keys.first ?? ""
+        var code = "default"
+        if self.urlComponentsData[code] == nil {
+            code = self.urlComponentsData.keys.first ?? ""
+        }
         return self.restHeaders(for: code)
     }
     open func restHeaders(for code: String) -> NETPTCLConfigResHeaders {
