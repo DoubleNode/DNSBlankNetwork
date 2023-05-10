@@ -92,7 +92,11 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         return .success(headers)
     }
     open func urlRequest(using url: URL) -> NETPTCLConfigResURLRequest {
-        return self.urlRequest(for: "", using: url)
+        var code = "default"
+        if self.urlComponentsData[code] == nil {
+            code = self.urlComponentsData.keys.first ?? ""
+        }
+        return self.urlRequest(for: code, using: url)
     }
     open func urlRequest(for code: String, using url: URL) -> NETPTCLConfigResURLRequest {
         let result = self.restHeaders(for: code)

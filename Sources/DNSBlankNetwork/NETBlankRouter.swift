@@ -67,7 +67,13 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
 
     // MARK: - Network Router Logic (Public) -
     open func urlRequest(using url: URL) -> NETPTCLRouterResURLRequest {
-        return self.urlRequest(for: "", using: url)
+        let result = netConfig.urlRequest(using: url)
+        if case .failure(let error) = result {
+            DNSCore.reportError(error)
+            return .failure(error)
+        }
+        let urlRequest = try! result.get()
+        return .success(urlRequest)
     }
     open func urlRequest(for code: String,
                          using url: URL) -> NETPTCLRouterResURLRequest {
