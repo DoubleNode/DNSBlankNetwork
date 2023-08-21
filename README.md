@@ -20,9 +20,9 @@ DNSBlankNetwork is a collection of blank system classes used for the DNSFramewor
 
 ## Requirements
 
--   iOS 13.0+ / macOS 10.15+ / tvOS 13.0+ / watchOS 6.0+
--   Xcode 11.6+
--   Swift 5.1+
+-   iOS 16.0+ / macOS 13.3+ / tvOS 16.4+ / watchOS 9.4+
+-   Xcode 14.3.1+
+-   Swift 5.8+
 
 ## Installation
 
@@ -34,15 +34,15 @@ Once you have your Swift package set up, adding Alamofire as a dependency is as 
 
 ```swift
 dependencies: [
-.package(url: "https://github.com/DoubleNode/DNSBlankNetwork.git", from: "1.10.3")
+.package(url: "https://github.com/DoubleNode/DNSBlankNetwork.git", from: "1.11.0")
 ]
 ```
 
 ## Dependencies
 
--   Alamofire v5.6.4+
--   DNSError v1.10.0+
--   DNSProtocols v1.10.90+
+-   Alamofire v5.7.1+
+-   DNSError v1.11.0+
+-   DNSProtocols v1.11.0+
 
 ## Credits
 
