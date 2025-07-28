@@ -64,7 +64,7 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
     open func urlComponents(for code: String) -> NETPTCLConfigResURLComponents {
         guard let retval = self.urlComponentsData[code] else {
             let error = DNSError.NetworkBase
-                .invalidParameters(parameters: ["code"], .blankNetwork(self))
+                .invalidParameters(parameters: ["code"], transactionId: "", .blankNetwork(self))
             DNSCore.reportError(error)
             return .failure(error)
         }
@@ -73,7 +73,7 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
     open func urlComponents(set components: URLComponents, for code: String) -> NETPTCLConfigResVoid {
         guard !code.isEmpty else {
             let error = DNSError.NetworkBase
-                .invalidParameters(parameters: ["code"], .blankNetwork(self))
+                .invalidParameters(parameters: ["code"], transactionId: "", .blankNetwork(self))
             DNSCore.reportError(error)
             return .failure(error)
         }
