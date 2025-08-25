@@ -17,14 +17,14 @@ import Foundation
 public typealias NETBlankRouterRtnVoid = Void
 
 // Protocol Result Types
-public typealias NETBlankRouterResVoid = Result<NETBlankRouterRtnVoid, Error>
+public typealias NETBlankRouterResVoid = Result<NETBlankRouterRtnVoid, any Error>
 
 open class NETBlankRouter: NSObject, NETPTCLRouter {
     static public var languageCode: String {
         DNSCore.languageCode
     }
     
-    public var netConfig: NETPTCLConfig
+    public var netConfig: any NETPTCLConfig
     @Atomic private var options: [String] = []
     
     override public required init() {
@@ -32,7 +32,7 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
         super.init()
         self.configure()
     }
-    public required init(with netConfig: NETPTCLConfig) {
+    public required init(with netConfig: any NETPTCLConfig) {
         self.netConfig = netConfig
         super.init()
         self.configure()
@@ -69,7 +69,9 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
     open func urlRequest(using url: URL) -> NETPTCLRouterResURLRequest {
         let result = netConfig.urlRequest(using: url)
         if case .failure(let error) = result {
-            DNSCore.reportError(error)
+            Task { @MainActor in
+                DNSCore.reportError(error)
+            }
             return .failure(error)
         }
         let urlRequest = try! result.get()
@@ -79,7 +81,9 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
                          using url: URL) -> NETPTCLRouterResURLRequest {
         let result = netConfig.urlRequest(for: code, using: url)
         if case .failure(let error) = result {
-            DNSCore.reportError(error)
+            Task { @MainActor in
+                DNSCore.reportError(error)
+            }
             return .failure(error)
         }
         let urlRequest = try! result.get()
