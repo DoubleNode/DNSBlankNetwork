@@ -8,14 +8,13 @@
 
 import AtomicSwift
 import Alamofire
-import DNSCore
 import DNSError
 import DNSProtocols
 import Foundation
 
 open class NETBlankConfig: NSObject, NETPTCLConfig {
     static public var languageCode: String {
-        DNSCore.languageCode
+        Locale.current.language.languageCode?.identifier ?? "en"
     }
     
     @Atomic private var options: [String] = []
@@ -65,7 +64,7 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         guard let retval = self.urlComponentsData[code] else {
             let error = DNSError.NetworkBase
                 .invalidParameters(parameters: ["code"], transactionId: "", .blankNetwork(self))
-            DNSCore.reportError(error)
+            // Error reported via result
             return .failure(error)
         }
         return .success(retval)
@@ -74,7 +73,7 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
         guard !code.isEmpty else {
             let error = DNSError.NetworkBase
                 .invalidParameters(parameters: ["code"], transactionId: "", .blankNetwork(self))
-            DNSCore.reportError(error)
+            // Error reported via result
             return .failure(error)
         }
         self.urlComponentsData[code] = components
@@ -101,7 +100,7 @@ open class NETBlankConfig: NSObject, NETPTCLConfig {
     open func urlRequest(for code: String, using url: URL) -> NETPTCLConfigResURLRequest {
         let result = self.restHeaders(for: code)
         if case .failure(let error) = result {
-            DNSCore.reportError(error)
+            // Error reported via result
             return .failure(error)
         }
         let headers = try! result.get()

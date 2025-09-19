@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:6.0
 //
 //  Package.swift
 //  DoubleNode Swift Framework (DNSFramework) - DNSBlankSystems
@@ -14,6 +14,7 @@ let package = Package(
     platforms: [
         .iOS(.v16),
         .tvOS(.v16),
+        .macCatalyst(.v16),
         .macOS(.v13),
         .watchOS(.v9),
     ],
@@ -26,19 +27,22 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.10.2"),
-        .package(url: "https://github.com/DoubleNode/DNSError.git", from: "1.11.1"),
-        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", from: "1.11.17")
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.10.2")),
+        .package(url: "https://github.com/DoubleNodeOpen/AtomicSwift.git", .upToNextMajor(from: "1.2.3")),
+        .package(url: "https://github.com/DoubleNode/DNSError.git", .upToNextMajor(from: "1.12.0")),
+        .package(url: "https://github.com/DoubleNode/DNSProtocols.git", .upToNextMajor(from: "1.12.0")),
+//        .package(path: "../DNSError"),
+//        .package(path: "../DNSProtocols"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "DNSBlankNetwork",
-            dependencies: ["Alamofire", "DNSError", "DNSProtocols"]),
+            dependencies: ["Alamofire", "AtomicSwift", "DNSError", "DNSProtocols"]),
         .testTarget(
             name: "DNSBlankNetworkTests",
             dependencies: ["DNSBlankNetwork"]),
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v6]
 )

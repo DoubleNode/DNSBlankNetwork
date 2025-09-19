@@ -7,8 +7,6 @@
 //
 
 import AtomicSwift
-import Alamofire
-import DNSCore
 import DNSError
 import DNSProtocols
 import Foundation
@@ -21,7 +19,7 @@ public typealias NETBlankRouterResVoid = Result<NETBlankRouterRtnVoid, Error>
 
 open class NETBlankRouter: NSObject, NETPTCLRouter {
     static public var languageCode: String {
-        DNSCore.languageCode
+        Locale.current.language.languageCode?.identifier ?? "en"
     }
     
     public var netConfig: NETPTCLConfig
@@ -69,7 +67,7 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
     open func urlRequest(using url: URL) -> NETPTCLRouterResURLRequest {
         let result = netConfig.urlRequest(using: url)
         if case .failure(let error) = result {
-            DNSCore.reportError(error)
+            // Error reported via result
             return .failure(error)
         }
         let urlRequest = try! result.get()
@@ -79,7 +77,7 @@ open class NETBlankRouter: NSObject, NETPTCLRouter {
                          using url: URL) -> NETPTCLRouterResURLRequest {
         let result = netConfig.urlRequest(for: code, using: url)
         if case .failure(let error) = result {
-            DNSCore.reportError(error)
+            // Error reported via result
             return .failure(error)
         }
         let urlRequest = try! result.get()
